@@ -4,6 +4,9 @@ on:
 
 name: React Release
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Upload Release Asset
@@ -12,7 +15,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.4
           extensions: mysql, mysqlnd, sqlite3, bcmath, gd, curl, zip, openssl, mbstring, xml
 
       - name: Checkout code
@@ -37,7 +40,7 @@ jobs:
 
       - name: Prepare React FrontEnd
         run: |
-          git clone https://github.com/ProspectBD/ui.git
+          git clone https://x-access-token:${{ secrets.UI_REPO_TOKEN }}@github.com/ProspectBD/ui.git
           cd ui
           git checkout develop
           sed -i 's/VITE_IS_TEST=true/VITE_IS_TEST=false/' .env.example
@@ -73,7 +76,6 @@ jobs:
           tar --exclude='public/storage' --exclude='invoiceninja.zip' -zcvf /home/runner/work/invoiceninja/invoiceninja.tar.gz *
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
