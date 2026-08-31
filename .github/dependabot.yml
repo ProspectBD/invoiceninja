@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
-    target-branch: "v5-develop"
+    target-branch: "master"
     schedule:
       interval: "monthly"
     versioning-strategy: "increase"
